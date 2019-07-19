@@ -2,10 +2,14 @@ package test.javasandbox.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.Scanner;
 
 public class IODemo2 {
 	static String inFileStr = "TestImage.jpg";
@@ -58,9 +62,55 @@ public class IODemo2 {
 		System.out.println("fileCopyWithBufferAndArray: " + (elapsedTime / 1000000.0) + " msec");
 	}
 
+	public static void readFromStandardInput() {
+		System.out.println("\nInside readFromStandardInput ...");
+		String data;
+		System.out.print("Enter \"start\" to continue (Using BufferedReader): ");
+
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"))) {
+			while ((data = in.readLine()) != null && !data.equals("start")) {
+				System.out.println("\nDid not enter \"start\". Try again: ");
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Correct");
+	}
+
+	public static void readFromStandardInput2() {
+		System.out.println("\nInside readFromStandardInput2 ...");
+		String data;
+		System.out.print("Enter \"start\" to continue (Using java.util.Scanner): ");
+		try (Scanner scanner = new Scanner(System.in)) {	
+			while(!(data = scanner.nextLine()).equals("start")) {
+				System.out.println("\nDid not enter \"start\". Try again: ");
+			}
+			
+			System.out.println("Correct");
+			System.out.println("Now, enter that start code: ");
+			int code = scanner.nextInt(); // other methods: nextLong, nextDouble, etc
+			System.out.println("Thanks. You entered code: " + code);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		Scanner s1 = new Scanner("Hello, how are you?");
+		
+		while(s1.hasNext()) {
+			System.out.println(s1.next());
+		}
+		
+		s1.close();	
+	}
+
 	public static void main(String[] args) {
 		// fileCopyNoBuffer();
-		fileCopyWithBufferAndArray();
-		System.out.println(System.getProperty("file.encoding"));
+//		fileCopyWithBufferAndArray();
+//		System.out.println(System.getProperty("file.encoding"));
+//		readFromStandardInput();
+		readFromStandardInput2();
 	}
 }
