@@ -2,11 +2,13 @@ package test.javasandbox.collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ListDemo {
 
-	private static void arrayListDemo() {
+	private static List<Integer> arrayListDemo() {
 		List<Integer> list1 = new ArrayList<>();
 		list1.add(1);
 		list1.add(2);
@@ -61,17 +63,57 @@ public class ListDemo {
 		// System.out.println("list3: " + list3);
 		System.out.println("list1: " + list1);
 
-		for (int element : list1) {
+		/*
+		 * for (int element : list1) { System.out.println("element: " + element);
+		 * 
+		 * // Generates ConcurrentModificationException if (element == 9) {
+		 * list1.remove(Integer.valueOf(element)); // valueOf is used due to its caching
+		 * } }
+		 */
+
+		return list1;
+	}
+
+	private static void iteratorDemo(List<Integer> list1) {
+		System.out.println("\nInside iteratorDemo ... ");
+
+		Iterator<Integer> iterator = list1.iterator();
+		while (iterator.hasNext()) {
+			int element = iterator.next();
 			System.out.println("element: " + element);
 
-			// Generates ConcurrentModificationException
 			if (element == 9) {
-				list1.remove(Integer.valueOf(element)); // valueOf is used due to its caching
+				iterator.remove();
+//				iterator.forEachRemaining(Filter::add);
 			}
 		}
+		System.out.println("list1: " + list1);
+
+		// list1.forEach(System.out::println);
+		// list1.forEach(Filter::filter);
+		// list1.forEach(new Filter()); // requires implementing Consumer
+
 	}
 
 	public static void main(String[] args) {
-		arrayListDemo();
+		List<Integer> list1 = arrayListDemo();
+		iteratorDemo(list1);
 	}
+}
+
+class Filter implements Consumer {
+	static void filter(Integer i) {
+		if (i == 1)
+			System.out.println(i);
+	}
+	
+	public void accept(Object i) {		
+		if ((int)i == 1)
+			System.out.println(i);
+	}
+		
+	static void add(Integer i) {
+		System.out.println(i + 7);
+	}
+		
 }
