@@ -1,6 +1,7 @@
 package test.javasandbox.collections;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class SetDemo {
@@ -21,8 +22,23 @@ public class SetDemo {
 		System.out.println("set2: " + set2);
 	}
 
+	public static void linkedHashSetDemo() {
+		Set<String> hashSet = new HashSet<>();
+		hashSet.add("Raj");
+		hashSet.add("John");
+		hashSet.add("Anita");
+		System.out.println("hashSet: " + hashSet);
+
+		Set<String> linkedHashSet = new LinkedHashSet<>();
+		linkedHashSet.add("Raj");
+		linkedHashSet.add("John");
+		linkedHashSet.add("Anita");
+		System.out.println("linkedHashSet: " + linkedHashSet);
+	}
+
 	public static void main(String[] args) {
-		hashSetDemo();
+//		hashSetDemo();
+		linkedHashSetDemo();
 	}
 
 }
