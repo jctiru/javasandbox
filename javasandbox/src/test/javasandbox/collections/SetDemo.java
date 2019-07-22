@@ -44,7 +44,7 @@ public class SetDemo {
 		Book book3 = new Book("Walden", "Henry David Thoreau", 1854);
 		Book book4 = new Book("Effective Java", "Joshua Bloch", 2008);
 
-		Set<Book> books = new TreeSet<>();
+		Set<Book> books = new TreeSet<>(/* new TitleComparator() */);
 		books.add(book1);
 		books.add(book2);
 		books.add(book3);
