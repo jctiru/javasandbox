@@ -1,8 +1,10 @@
 package test.javasandbox.collections;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class SetDemo {
 
@@ -36,14 +38,32 @@ public class SetDemo {
 		System.out.println("linkedHashSet: " + linkedHashSet);
 	}
 
+	private static void treeSetDemo() {
+		Book book1 = new Book("Harry Potter", "J.K.Rowling", 1997);
+		Book book2 = new Book("Harry Potter", "J.K.Rowling", 1997);
+		Book book3 = new Book("Walden", "Henry David Thoreau", 1854);
+		Book book4 = new Book("Effective Java", "Joshua Bloch", 2008);
+
+		Set<Book> books = new TreeSet<>();
+		books.add(book1);
+		books.add(book2);
+		books.add(book3);
+		books.add(book4);
+
+		for (Book book : books) {
+			System.out.println(book);
+		}
+	}
+
 	public static void main(String[] args) {
 //		hashSetDemo();
-		linkedHashSetDemo();
+//		linkedHashSetDemo();
+		treeSetDemo();
 	}
 
 }
 
-class Book {
+class Book implements Comparable {
 	private String title;
 	private String author;
 	private int year;
@@ -124,5 +144,19 @@ class Book {
 	 * public boolean equals(Object o) { return (year == (((Book)o).getYear())) &&
 	 * (author.equals((((Book)o).getAuthor()))); }
 	 */
+
+	public int compareTo(Object book) {
+		return getTitle().compareTo(((Book) book).getTitle()); // utilizing String’s compareTo
+	}
+
+}
+
+class TitleComparator implements Comparator {
+
+	@Override
+	public int compare(Object o1, Object o2) {
+		// TODO Auto-generated method stub
+		return ((Book) o1).getTitle().compareTo(((Book) o2).getTitle());
+	}
 
 }
