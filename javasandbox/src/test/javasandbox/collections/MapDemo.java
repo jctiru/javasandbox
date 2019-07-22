@@ -1,6 +1,8 @@
 package test.javasandbox.collections;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,7 +61,54 @@ public class MapDemo {
 		System.out.println("Age: " + age);
 	}
 
+	private static void immutableKeysDemo() {
+		System.out.println("\n\nInside immutableKeysDemo ...");
+		List<Integer> list = new ArrayList<>();
+		list.add(1);
+
+		Map<List<Integer>, Integer> map = new HashMap<>();
+		map.put(list, 1);
+
+		list.add(2);
+		System.out.println(map.get(list));
+
+		Student s = new Student(1, null);
+		Map<Student, Integer> map2 = new HashMap<>();
+		map2.put(s, 1);
+
+		s.setName("John");
+		System.out.println(map2.get(s));
+	}
+
 	public static void main(String[] args) {
-		hashMapDemo();
+//		hashMapDemo();
+		immutableKeysDemo();
+	}
+}
+
+class Student {
+	private int id;
+	private String name;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Student(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
 	}
 }
