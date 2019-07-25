@@ -29,14 +29,41 @@ public class GenericsDemo {
 
 		List[] array = new ArrayList[2];
 		array[0] = new ArrayList();
-		array[1] = new LinkedList(); // Runtime exception
+//		array[1] = new LinkedList(); // Runtime exception
 
 		// Raw type demo:
 		// rawTypeTest();
 
 		List<String> strList1 = Arrays.asList("a", "b", "c");
 		List<String> strList2 = Arrays.asList("b", "c", "d");
-		getCommonElementsCount(strList1, strList2);
+//		getCommonElementsCount(strList1, strList2);
+
+		// Wildcard
+		getCommonElementsCountWithWildcard(strList1, strList2);
+
+		Container<?> someStore = stringStore;
+		Object object = someStore.get();
+		System.out.println("Stored element: " + object);
+
+		List<Integer> intList1 = Arrays.asList(1, 2);
+		List<Integer> intList2 = Arrays.asList(3, 4);
+//		invalidAggregate(intList1, intList2, new ArrayList());
+	}
+
+	public static void invalidAggregate(List<?> l1, List<?> l2, List<?> l3) {
+		// l3.addAll(null); // null ok
+		// l3.addAll(l2);
+	}
+
+	public static int getCommonElementsCountWithWildcard(List<?> list1, List<?> list2) {
+		int count = 0;
+		for (Object element : list1) {
+			if (list2.contains(element)) {
+				count++;
+			}
+		}
+		System.out.println("Common elements count: " + count);
+		return count;
 	}
 
 	public static int getCommonElementsCount(List list1, List list2) {
