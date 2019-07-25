@@ -30,6 +30,33 @@ public class GenericsDemo {
 		List[] array = new ArrayList[2];
 		array[0] = new ArrayList();
 		array[1] = new LinkedList(); // Runtime exception
+
+		// Raw type demo:
+		// rawTypeTest();
+
+		List<String> strList1 = Arrays.asList("a", "b", "c");
+		List<String> strList2 = Arrays.asList("b", "c", "d");
+		getCommonElementsCount(strList1, strList2);
+	}
+
+	public static int getCommonElementsCount(List list1, List list2) {
+		int count = 0;
+		for (Object element : list1) {
+			if (list2.contains(element)) {
+				count++;
+			}
+		}
+		System.out.println("Common elements count: " + count);
+		return count;
+	}
+
+	public static void rawTypeTest() {
+		System.out.println("\n\nInside rawTypeTest ...");
+		int ISBN = 1505297729;
+		List<Double> prices = new ArrayList<>();
+
+		HalfIntegrator.getPrice(ISBN, prices);
+		Double price = prices.get(0);
 	}
 }
 
@@ -49,4 +76,12 @@ class Store<T> implements Container<T> {
 	public T get() {
 		return a;
 	}
+}
+
+class HalfIntegrator {
+
+	public static void getPrice(int ISBN, List prices) {
+		prices.add(45);
+	}
+
 }
