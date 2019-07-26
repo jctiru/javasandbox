@@ -1,5 +1,8 @@
 package test.javasandbox.nestedclasses;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Cache {
 	private Bookmark[] items;
 	private int next = 0;
@@ -17,18 +20,17 @@ public class Cache {
 		return new MyCacheIterator();
 	}
 
+	// Non-static member class
 	private class MyCacheIterator implements CacheIterator {
 		private int i = 0;
 
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
 			return i < items.length;
 		}
 
 		@Override
 		public Bookmark next() {
-			// TODO Auto-generated method stub
 			return items[i++];
 		}
 
@@ -69,7 +71,23 @@ public class Cache {
 		while (iterator.hasNext()) {
 			System.out.println(iterator.next().getTitle());
 		}
+		
+		// Anonymous class
+		Arrays.sort(recommendedItems.items, new Comparator<Bookmark>() {
 
+			@Override
+			public int compare(Bookmark o1, Bookmark o2) {
+				return o1.getRating() < o2.getRating() ? 1 : -1; // Descending
+			}
+
+		});
+
+		System.out.println("\nSorted by rating ...");
+		iterator = recommendedItems.iterator();
+
+		while (iterator.hasNext()) {
+			System.out.println(iterator.next().getTitle());
+		}
 	}
 }
 
