@@ -71,7 +71,7 @@ public class Cache {
 		while (iterator.hasNext()) {
 			System.out.println(iterator.next().getTitle());
 		}
-		
+
 		// Anonymous class
 		Arrays.sort(recommendedItems.items, new Comparator<Bookmark>() {
 
@@ -82,7 +82,25 @@ public class Cache {
 
 		});
 
-		System.out.println("\nSorted by rating ...");
+		System.out.println("\nSorted by rating (Anonymous Class) ...");
+		iterator = recommendedItems.iterator();
+
+		while (iterator.hasNext()) {
+			System.out.println(iterator.next().getTitle());
+		}
+		
+		// Static member class - strategy
+		Arrays.sort(recommendedItems.items, Bookmark.RATING_COMPARATOR);
+		System.out.println("\nSorted by rating (Static Member Class) ...");
+		iterator = recommendedItems.iterator();
+
+		while (iterator.hasNext()) {
+			System.out.println(iterator.next().getTitle());
+		}
+		
+		// Static member class - public helper
+		Arrays.sort(recommendedItems.items, new Bookmark.ComparatorList.StringLengthComparator());
+		System.out.println("\nSorted by String length (Static Member Class) ...");
 		iterator = recommendedItems.iterator();
 
 		while (iterator.hasNext()) {
