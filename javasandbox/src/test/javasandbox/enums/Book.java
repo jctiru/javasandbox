@@ -1,16 +1,19 @@
 package test.javasandbox.enums;
 
-public enum BookGenre {
-	BIOGRAPHY(12), HORROR(15);
+public class Book {
+	public enum BookGenre {
+		BIOGRAPHY(12), HORROR(15);
 
-	private BookGenre(int minAgeToRead) {
-		this.minAgeToRead = minAgeToRead;
-	}
+		private BookGenre(int minAgeToRead) {
+			this.minAgeToRead = minAgeToRead;
+		}
 
-	private int minAgeToRead;
+		private int minAgeToRead;
 
-	public int getMinAgeToRead() {
-		return minAgeToRead;
+		public int getMinAgeToRead() {
+			return minAgeToRead;
+		}
+
 	}
 
 	public static void main(String[] args) {
@@ -24,4 +27,5 @@ public enum BookGenre {
 			System.out.print(", minAgeToRead: " + bookGenre.getMinAgeToRead());
 		}
 	}
+
 }
