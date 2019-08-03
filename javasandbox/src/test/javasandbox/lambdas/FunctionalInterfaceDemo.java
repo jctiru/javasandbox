@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.htmlcleaner.HtmlCleaner;
 
@@ -26,6 +27,7 @@ public class FunctionalInterfaceDemo {
 		String doc4 = "<html><body>Java 8 goes one more step ahead and has developed a streams API which lets us think about parallelism</body></html>";
 
 		List<String> documents = new ArrayList<>(Arrays.asList(doc1, doc2, doc3, doc4));
+		List<String> targetDocuments = new ArrayList<>();
 
 		for (String doc : documents) {
 			// boolean isTargetDoc = filter(doc, d -> d.contains("stream"));
@@ -44,10 +46,31 @@ public class FunctionalInterfaceDemo {
 				Function<String, String> docProcessor = htmlCleaner.andThen(stopwordRemover);
 				doc = transform(doc, docProcessor);
 
-				System.out.println(doc);
+//				System.out.println(doc);
+
+				targetDocuments.add(doc);
 			}
 		}
 
+		targetDocuments.forEach(d -> System.out.println(d));
+
+		for (String doc : targetDocuments) {
+			try {
+				if (doc.length() > 80) {
+					throw new Exception("Oversized document!!!");
+				}
+			} catch (Exception e) {
+				print(() -> e.getMessage() + " ~ " + doc);
+			}
+		}
+	}
+
+	private static boolean errorFlag = true;
+
+	private static void print(Supplier<String> supplier) {
+		if (errorFlag) {
+			System.out.println(supplier.get());
+		}
 	}
 
 	static boolean filter(String doc, Predicate<String> filter) {
