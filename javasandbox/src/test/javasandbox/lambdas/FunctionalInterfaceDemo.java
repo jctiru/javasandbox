@@ -31,17 +31,26 @@ public class FunctionalInterfaceDemo {
 
 		for (String doc : documents) {
 			// boolean isTargetDoc = filter(doc, d -> d.contains("stream"));
-			BiFunction<String, String, Boolean> biFunction = (d, c) -> d.contains(c);
+			// BiFunction<String, String, Boolean> biFunction = (d, c) -> d.contains(c);
+
+			// Method References (ClassName::instanceMethod)
+			Function<String, Boolean> function = doc::contains;
+			BiFunction<String, String, Boolean> biFunction = String::contains;
+
 			// if(isTargetDoc) {
-			if (biFunction.apply(doc, "stream")) {
+			// if (biFunction.apply(doc, "stream")) {
+			if (function.apply("stream")) {
 				// doc = transform(doc, d -> Indexer.stripHtmlTags(d));
 				// doc = transform(doc, d -> Indexer.removeStopwords(d));
 
 				Function<String, String> htmlCleaner = d -> Indexer.stripHtmlTags(d);
 				// doc = transform(doc, htmlCleaner);
 
-				Function<String, String> stopwordRemover = d -> Indexer.removeStopwords(d);
+				// Function<String, String> stopwordRemover = d -> Indexer.removeStopwords(d);
 				// doc = stopwordRemover.apply(doc);
+
+				// Method References (ClassName::staticMethod)
+				Function<String, String> stopwordRemover = Indexer::removeStopwords;
 
 				Function<String, String> docProcessor = htmlCleaner.andThen(stopwordRemover);
 				doc = transform(doc, docProcessor);
@@ -52,7 +61,9 @@ public class FunctionalInterfaceDemo {
 			}
 		}
 
-		targetDocuments.forEach(d -> System.out.println(d));
+		// targetDocuments.forEach(d -> System.out.println(d));
+		// Method References (objectRef::instanceMethod)
+		targetDocuments.forEach(System.out::println);
 
 		for (String doc : targetDocuments) {
 			try {
