@@ -1,4 +1,4 @@
-package test.javasandbox.lambdas;
+package test.javasandbox.functional;
 
 import java.util.ArrayList;
 import java.util.Arrays;

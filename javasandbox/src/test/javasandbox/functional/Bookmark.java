@@ -1,4 +1,4 @@
-package test.javasandbox.lambdas;
+package test.javasandbox.functional;
 
 public class Bookmark {
 	private long id;
