@@ -2,8 +2,10 @@ package test.javasandbox.lambdas;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -74,6 +76,22 @@ public class FunctionalInterfaceDemo {
 				print(() -> e.getMessage() + " ~ " + doc);
 			}
 		}
+
+		// Constructor References
+
+		// Typical scenario
+		Supplier<String> supplier = String::new; // () -> new String();
+		System.out.println("\nsupplier.get: " + supplier.get());
+
+		Function<String, String> function = String::new; // s -> new String(s);
+		System.out.println("\nfunction.apply: " + function.apply("Java"));
+
+		BiFunction<Integer, Float, HashMap> biFunction = HashMap::new; // (c, lf) -> new HashMap(c, lf);
+		System.out.println("\nbiFunction.apply: " + biFunction.apply(100, 0.75f));
+
+		// Does nothing as it returns void
+		Consumer<String> consumer = String::new;
+		consumer.accept("Java");
 	}
 
 	private static boolean errorFlag = true;
