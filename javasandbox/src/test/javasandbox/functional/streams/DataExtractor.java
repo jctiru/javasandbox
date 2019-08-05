@@ -3,8 +3,6 @@ package test.javasandbox.functional.streams;
 import java.util.Arrays;
 import java.util.List;
 
-import test.javasandbox.functional.streams.StreamOperations.Book;
-
 public class DataExtractor {
 
 	static List<Book> getFromAmazon(String keyword) {

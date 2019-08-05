@@ -8,72 +8,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StreamOperations {
-
-	static class Book {
-		private long isbn;
-		private String title;
-		private double rating;
-		private double price;
-		private String source;
-
-		public Book(long isbn, String title, double rating, double price, String source) {
-			this.isbn = isbn;
-			this.title = title;
-			this.rating = rating;
-			this.price = price;
-			this.source = source;
-		}
-
-		public long getIsbn() {
-			return isbn;
-		}
-
-		public String getTitle() {
-			return title;
-		}
-
-		public double getRating() {
-			return rating;
-		}
-
-		public double getPrice() {
-			return price;
-		}
-
-		public String getSource() {
-			return source;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + (int) (isbn ^ (isbn >>> 32));
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Book other = (Book) obj;
-			if (isbn != other.isbn)
-				return false;
-			return true;
-		}
-
-		@Override
-		public String toString() {
-			return "Book [isbn=" + isbn + ", title=" + title + ", rating=" + rating + ", price=" + price + ", source="
-					+ source + "]";
-		}
-
-	}
-
 	// Print at most 5 DISTINCT books with rating >= 4.5
 	// DB world: SELECT DISTINCT (ISBN) FROM book WHERE rating >= 4.5 LIMIT 0, 5;
 	private static void slice(List<Book> books) {
@@ -200,10 +134,29 @@ public class StreamOperations {
 				.reduce("", (s1, s2) -> s1 + s2);
 		System.out.println("concat1: " + concat1);
 
-		StringBuilder concat2 = Arrays.stream(grades)
+		// Single instance of container is used,
+		// SB is not thread-safe,
+		// combiner redundantly combines
+		StringBuilder concat2 = Arrays.stream(grades)// .parallel()
 				.reduce(new StringBuilder(), (sb, s) -> sb.append(s),
 						(sb1, sb2) -> sb1.append(sb2));
 		System.out.println("concat2: " + concat2);
+	}
+
+	// If accumulator mutates, use collect(). Otherwise, use reduce()
+	private static void mutableReduction() {
+		System.out.println("\nmutableReduction ... ");
+		String[] grades = { "A", "A", "B" };
+
+		StringBuilder concat = Arrays.stream(grades).parallel()
+				.collect(() -> new StringBuilder(),
+						(sb, s) -> sb.append(s),
+						(sb1, sb2) -> sb1.append(sb2));
+		System.out.println("concat: " + concat);
+
+		String concatWithJoining = Arrays.stream(grades).parallel()
+				.collect(Collectors.joining());
+		System.out.println("concatWithJoining: " + concatWithJoining);
 	}
 
 	public static void main(String[] args) {
@@ -224,6 +177,8 @@ public class StreamOperations {
 		reduce(books);
 		reduceImperatively(books);
 		overloadedReductions();
+
+		mutableReduction();
 	}
 
 }
