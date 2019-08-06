@@ -3,6 +3,8 @@ package test.javasandbox.functional.streams;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -226,6 +228,7 @@ public class StreamOperations {
 //			}
 //		}
 
+		System.out.println("\ngroupingBy with values as List ... ");
 		Map<Double, List<Book>> ratingsMap1 = treeMap.values().stream()
 				.collect(Collectors.groupingBy(Book::getRating));
 		for (Entry<Double, List<Book>> entry : ratingsMap1.entrySet()) {
@@ -234,6 +237,48 @@ public class StreamOperations {
 				System.out.println(b);
 			}
 		}
+
+		System.out.println("\ngroupingBy with values as Set ... ");
+		Map<Double, Set<Book>> ratingsMap2 = treeMap.values().stream()
+				.collect(Collectors.groupingBy(Book::getRating, TreeMap::new, Collectors.toSet())); // HashMap default
+		for (Entry<Double, Set<Book>> entry : ratingsMap2.entrySet()) {
+			System.out.println("\nRating: " + entry.getKey());
+			for (Book b : entry.getValue()) {
+				System.out.println(b);
+			}
+		}
+
+		Map<Double, Map<String, List<Book>>> multiLevelMap = treeMap.values().stream()
+				.collect(Collectors.groupingBy(Book::getRating,
+						Collectors.groupingBy(Book::getSource, Collectors.toList())));
+		System.out.println("\nmultiLevelMap: " + multiLevelMap);
+
+		Map<Double, Long> ratingsCountMap = treeMap.values().stream()
+				.collect(Collectors.groupingBy(Book::getRating, Collectors.counting()));
+		System.out.println("\nratingsCountMap: " + ratingsCountMap);
+		System.out.println("\ncount: " + treeMap.values().stream().collect(Collectors.counting()));
+
+		Map<Double, Double> ratingsAvgPriceMap = treeMap.values().stream()
+				.collect(Collectors.groupingBy(Book::getRating, Collectors.averagingDouble(Book::getPrice)));
+		System.out.println("\nratingsAvgPriceMap: " + ratingsAvgPriceMap);
+
+		Map<Double, Optional<Book>> ratingsMinPriceMap = treeMap.values().stream()
+				.collect(Collectors.groupingBy(Book::getRating,
+						Collectors.minBy(Comparator.comparingDouble(Book::getPrice))));
+		System.out.println("\nratingsMinPriceMap: " + ratingsMinPriceMap);
+
+		Map<Double, DoubleSummaryStatistics> ratingsSummaryMap = treeMap.values().stream()
+				.collect(Collectors.groupingBy(Book::getRating, Collectors.summarizingDouble(Book::getPrice)));
+		System.out.println("\nDoubleSummaryStatistics: " + ratingsSummaryMap);
+
+		Map<Boolean, List<Book>> partitionedMap = treeMap.values().stream()
+				.collect(Collectors.partitioningBy(b -> b.getRating() >= 4.5));
+		System.out.println("\npartitionedMap: " + partitionedMap);
+
+		Map<Double, List<String>> ratingsTitleMap = treeMap.values().stream()
+				.collect(Collectors.groupingBy(Book::getRating,
+						Collectors.mapping(Book::getTitle, Collectors.toList())));
+		System.out.println("\nratingsTitleMap: " + ratingsTitleMap);
 	}
 
 	public static void main(String[] args) {
