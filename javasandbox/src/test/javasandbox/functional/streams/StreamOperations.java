@@ -2,10 +2,16 @@ package test.javasandbox.functional.streams;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -186,6 +192,50 @@ public class StreamOperations {
 		System.out.println("set2.size: " + set2.size());
 	}
 
+	private static void collectToMap(List<Book> books) {
+		System.out.println("\nIn collectToMap ...");
+		Map<Long, Book> map = books.stream()
+				// .collect(Collectors.toMap(b -> b.getIsbn(), b -> b));
+				.collect(Collectors.toMap(b -> b.getIsbn(), b -> b,
+						(b1, b2) -> b1.getPrice() <= b2.getPrice() ? b1 : b2));
+		for (Entry<Long, Book> entry : map.entrySet()) {
+			System.out.println("isbn: " + entry.getKey() + ", book: " + entry.getValue());
+		}
+
+		System.out.println(map instanceof HashMap);
+
+		Map<Long, Book> treeMap = books.stream()
+				// .collect(Collectors.toMap(b -> b.getIsbn(), b -> b));
+				.collect(Collectors.toMap(Book::getIsbn, Function.identity(),
+						(b1, b2) -> b1.getPrice() <= b2.getPrice() ? b1 : b2, () -> new TreeMap<Long, Book>()));
+		for (Entry<Long, Book> entry : treeMap.entrySet()) {
+			System.out.println("isbn: " + entry.getKey() + ", book: " + entry.getValue());
+		}
+
+//		Map<Double, List<Book>> ratingsMap = treeMap.values().stream()
+//				.collect(Collectors.toMap(Book::getRating, b -> Collections.singletonList(b),
+//						(l1, l2) -> {
+//							ArrayList<Book> l = new ArrayList<>(l1);
+//							l.addAll(l2);
+//							return l;
+//						}));
+//		for (Entry<Double, List<Book>> entry : ratingsMap.entrySet()) {
+//			System.out.println("\nRating: " + entry.getKey());
+//			for (Book b : entry.getValue()) {
+//				System.out.println(b);
+//			}
+//		}
+
+		Map<Double, List<Book>> ratingsMap1 = treeMap.values().stream()
+				.collect(Collectors.groupingBy(Book::getRating));
+		for (Entry<Double, List<Book>> entry : ratingsMap1.entrySet()) {
+			System.out.println("\nRating: " + entry.getKey());
+			for (Book b : entry.getValue()) {
+				System.out.println(b);
+			}
+		}
+	}
+
 	public static void main(String[] args) {
 		List<Book> books = new ArrayList<>();
 
@@ -205,9 +255,11 @@ public class StreamOperations {
 //		reduceImperatively(books);
 //		overloadedReductions();
 
-		mutableReduction();
+//		mutableReduction();
 
-		collectToCollection(books);
+//		collectToCollection(books);
+
+		collectToMap(books);
 	}
 
 }
