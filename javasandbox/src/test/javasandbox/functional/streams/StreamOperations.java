@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -149,14 +151,39 @@ public class StreamOperations {
 		String[] grades = { "A", "A", "B" };
 
 		StringBuilder concat = Arrays.stream(grades).parallel()
-				.collect(() -> new StringBuilder(),
-						(sb, s) -> sb.append(s),
-						(sb1, sb2) -> sb1.append(sb2));
+//				.collect(() -> new StringBuilder(),
+//						(sb, s) -> sb.append(s),
+//						(sb1, sb2) -> sb1.append(sb2));
+				.collect(StringBuilder::new,
+						StringBuilder::append,
+						StringBuilder::append);
 		System.out.println("concat: " + concat);
 
 		String concatWithJoining = Arrays.stream(grades).parallel()
 				.collect(Collectors.joining());
 		System.out.println("concatWithJoining: " + concatWithJoining);
+	}
+
+	private static void collectToCollection(List<Book> books) {
+		System.out.println("\nIn collectToCollection ...");
+		List<Book> list1 = books.stream()
+				.filter(b -> b.getRating() >= 4.5)
+				.distinct()
+				.collect(ArrayList::new,
+						ArrayList::add,
+						ArrayList::addAll);
+		// .collect(Collectors.toList());
+		System.out.println("list1.size: " + list1.size());
+
+		Set<Book> set1 = books.stream()
+				.filter(b -> b.getRating() >= 4.5)
+				.collect(Collectors.toSet()); // HashSet
+		System.out.println("set1.size: " + set1.size());
+
+		TreeSet<Book> set2 = books.stream()
+				.filter(b -> b.getRating() >= 4.5)
+				.collect(Collectors.toCollection(() -> new TreeSet<Book>()));
+		System.out.println("set2.size: " + set2.size());
 	}
 
 	public static void main(String[] args) {
@@ -174,11 +201,13 @@ public class StreamOperations {
 		// All matching & finding operations + limit are short-circuit operations
 		// find(books);
 
-		reduce(books);
-		reduceImperatively(books);
-		overloadedReductions();
+//		reduce(books);
+//		reduceImperatively(books);
+//		overloadedReductions();
 
 		mutableReduction();
+
+		collectToCollection(books);
 	}
 
 }
