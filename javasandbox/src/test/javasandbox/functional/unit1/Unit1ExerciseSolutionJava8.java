@@ -1,4 +1,4 @@
-package test.javasandbox.functional;
+package test.javasandbox.functional.unit1;
 
 import java.util.Arrays;
 import java.util.Collections;

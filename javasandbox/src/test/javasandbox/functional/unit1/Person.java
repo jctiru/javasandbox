@@ -1,4 +1,4 @@
-package test.javasandbox.functional;
+package test.javasandbox.functional.unit1;
 
 public class Person {
 
